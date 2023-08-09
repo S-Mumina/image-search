@@ -3,7 +3,7 @@ const accessKey = "lj-5CQ4tSUvKAvQlqOqUgw0c9gg3qi6wV8I5uW99Ieg"
 const form = document.querySelector("form")
 const searchInput = document.getElementById("search-input")
 const searchResults = document.querySelector(".search-results")
-const showMore = document.getElementById("show-more")
+const showMoreBtn = document.getElementById("show-more")
 
 let inputData = "";
 let page = 1;
@@ -20,17 +20,28 @@ async function searchImages(){
    }
 
    const results = data.results;
+
    results.map ((result)=> {
-    const imageWrapper = document.createElement("div")
-    imageWrapper.classList.add("search-result")
-    const image = document.createElement("img")
+    const imageWrapper = document.createElement("div");
+    imageWrapper.classList.add("search-result");
+    const image = document.createElement("img");
     image.src = result.urls.small;
     image.alt = result.alt_description;
-   })
+    const imageLink = document.createElement("a")
+    imageLink.href = result.links.html;
+    imageLink.target = "_blank";
+    imageLink.textContent = result.alt_description;
+
+    imageWrapper.appendChild(image);
+    imageWrapper.appendChild(imageLink);
+    searchResults.appendChild(imageWrapper);
+   });
+
+   page++
    
   
    if (page > 1){
-    showMore.style.display = block;
+    showMoreBtn.style.display = "block";
    }
    
 }
@@ -42,3 +53,7 @@ form.addEventListener("submit",(e) => {
     searchImages();
 
 });
+
+showMoreBtn.addEventListener("click",()=>{
+    searchImages();
+})
